@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>英文 1–10 拼音學習</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+TC:wght@400;700&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- 新增 Font Awesome 連結以顯示社交媒體圖標 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root{
+      --c-cvc-bg:#d1fae5; --c-cvc-border:#10b981; --c-cvc-text:#065f46;
+      --c-magic-e-bg:#dbeafe; --c-magic-e-border:#3b82f6; --c-magic-e-text:#1e40af;
+      --c-vowel-team-bg:#ffedd5; --c-vowel-team-border:#f97316; --c-vowel-team-text:#9a3412;
+      --c-r-controlled-bg:#e9d5ff; --c-r-controlled-border:#a855f7; --c-r-controlled-text:#581c87;
+      --c-heart-word-bg:#fee2e2; --c-heart-word-border:#ef4444; --c-heart-word-text:#991b1b;
+      --c-cvc-schwa-bg:#ccfbf1; --c-cvc-schwa-border:#14b8a6; --c-cvc-schwa-text:#0f766e;
+    }
+    *{box-sizing:border-box;}
+    body{font-family:'Inter','Noto Sans TC',sans-serif;background:#f8fafc;color:#1e293b;margin:0;padding:1rem;line-height:1.6;font-size:18px;}
+    .container{max-width:1200px;margin:0 auto;padding:1rem;background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.05);}
+
+    h1{font-family:'Noto Sans TC',sans-serif;font-size:2rem;font-weight:700;color:#0f172a;text-align:center;margin-bottom:2rem;}
+
+    /* Legend */
+    .legend{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-bottom:2rem;padding:0;list-style:none;}
+    .legend-item,.category-tag{padding:.3rem .75rem;border-radius:999px;font-size:.9rem;font-weight:700;border:2px solid;white-space:nowrap;cursor:pointer;user-select:none;transition:transform .1s ease,opacity .2s ease;}
+    .legend-item:hover{transform:scale(1.05);}
+    .legend-item.selected{outline:3px solid rgba(14,165,233,.25);}
+    .tag-all{background:#e5e7eb;border-color:#94a3b8;color:#334155;}
+
+    /* 中文分類按鈕色系 */
+    .tag-irregular{background:var(--c-heart-word-bg);border-color:var(--c-heart-word-border);color:var(--c-heart-word-text);}
+    .tag-closed{background:var(--c-cvc-bg);border-color:var(--c-cvc-border);color:var(--c-cvc-text);}
+    .tag-floss{background:#ffe4e6;border-color:#fb7185;color:#9f1239;}
+    .tag-digraph{background:#e0f2fe;border-color:#38bdf8;color:#075985;}
+    .tag-cluster{background:#ede9fe;border-color:#8b5cf6;color:#4c1d95;}
+    .tag-suffix{background:#fef9c3;border-color:#f59e0b;color:#78350f;}
+    .tag-rcontrolled{background:var(--c-r-controlled-bg);border-color:var(--c-r-controlled-border);color:var(--c-r-controlled-text);}
+    .tag-open{background:#dcfce7;border-color:#22c55e;color:#14532d;}
+    .tag-cle{background:#f5f5f4;border-color:#a8a29e;color:#3f3f46;}
+    .tag-magic-e-cn{background:var(--c-magic-e-bg);border-color:var(--c-magic-e-border);color:var(--c-magic-e-text);}
+    .tag-vowel-team-cn{background:var(--c-vowel-team-bg);border-color:var(--c-vowel-team-border);color:var(--c-vowel-team-text);}
+    .tag-diphthong{background:#dbeafe;border-color:#60a5fa;color:#1e3a8a;}
+    .tag-silent-con{background:#f1f5f9;border-color:#94a3b8;color:#334155;}
+
+    /* 卡片 */
+    #teaching-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;}
+    .word-card{border:2px solid #cbd5e1;border-radius:12px;background:#fff;box-shadow:0 4px 6px rgba(0,0,0,.03);overflow:hidden;transition:transform .2s,box-shadow .2s;}
+    .word-card.hidden{display:none;}
+    .word-card:hover{transform:translateY(-5px);box-shadow:0 8px 15px rgba(0,0,0,.07);}
+
+    .card-header{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;background:#f1f5f9;border-bottom:2px solid #e2e8f0;}
+    .card-title{display:flex;align-items:baseline;gap:.75rem;}
+    .word-number{font-size:1.5rem;font-weight:700;color:#64748b;}
+    .word-text{font-size:2.5rem;font-weight:700;color:#0f172a;}
+    .audio-button{font-size:2rem;cursor:pointer;background:none;border:none;padding:0;line-height:1;}
+
+    .card-body{padding:1.5rem;}
+    .category-tag{font-size:.85rem;margin-bottom:.5rem;display:inline-block;}
+
+    /* 對齊盒 */
+    .boxes-grid{display:grid;grid-auto-rows:auto;border:2px solid #94a3b8;border-radius:8px;overflow:hidden;}
+    .box{display:flex;align-items:center;justify-content:center;min-height:60px;padding:.5rem;text-align:center;font-size:1.6rem;font-weight:700;border-right:2px solid #cbd5e1;}
+    .box:last-child{border-right:none;}
+    .grapheme-box{background:#f1f5f9;color:#1e293b;position:relative;font-family:'Inter','Noto Sans TC',sans-serif;border-bottom:2px solid #cbd5e1;grid-row:1;}
+    .phoneme-box{background:#fff;color:#475569;font-family:'Noto Sans',sans-serif;font-size:1.35rem;font-weight:400;grid-row:2;} 
+    .heart-symbol{position:absolute;bottom:-2px;left:0;right:0;text-align:center;color:#ef4444;font-size:1.1rem;line-height:1;}
+
+    /* 頁尾版權資訊 (Credits) */
+    .credits{
+      margin-top: 2rem;       /* mt-8 */
+      padding-top: 1.5rem;    /* pt-6 */
+      border-top: 2px solid #e2e8f0; /* border-t border-slate-200 (using 2px for visibility) */
+      text-align: center;     /* text-center */
+      font-size: 0.875rem;    /* text-sm */
+      color: #475569;         /* text-slate-600 */
+      line-height: 1.6;       /* leading-snug or slightly more legible */
+    }
+    .credits a{
+        color: #64748b; /* Icon color */
+        margin: 0 0.5rem;
+        transition: color 0.2s;
+        text-decoration: none;
+    }
+    .credits a:hover{
+        color: #3b82f6; /* Blue hover for interaction */
+    }
+
+    .word-tips{background:#fef3c7;border:1px solid #fbbf24;border-radius:6px;padding:.5rem .75rem;margin-top:1rem;font-family:'Noto Sans TC',sans-serif;color:#78350f;font-size:.95rem;line-height:1.4;display:flex;gap:.5rem;align-items:flex-start;}
+    .tips-icon{color:#f59e0b;font-size:1.1rem;}
+
+    @media (max-width:768px){
+      .container{padding:.5rem;}
+      h1{font-size:1.6rem;}
+      #teaching-grid{grid-template-columns:1fr;}
+      .word-text{font-size:2rem;}
+      .box{font-size:1.4rem;min-height:50px;}
+      .phoneme-box{font-size:1.2rem;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <main>
+      <section id="teachingPage" class="page-section active">
+        <h1>數字英文 1–10 聲音對照表</h1>
+        <ul class="legend" id="category-filters" aria-label="分類篩選">
+          <li class="legend-item tag-all" data-category="all">全部</li>
+          <li class="legend-item tag-irregular" data-category="irregular">不規則拼寫</li>
+          <li class="legend-item tag-closed" data-category="closed">閉音節-短母音</li>
+          <li class="legend-item tag-magic-e-cn" data-category="magic_e">長母音 + 靜音 'e'</li>
+          <li class="legend-item tag-vowel-team-cn" data-category="vowel_team">母音組合</li>
+          <li class="legend-item tag-diphthong" data-category="diphthong">雙母音</li>
+          <li class="legend-item tag-open" data-category="open">開音節-長母音</li>
+          <li class="legend-item tag-floss" data-category="floss">重複子音字尾 (FLOSS-Z)</li>
+          <li class="legend-item tag-digraph" data-category="digraph">雙字母子音</li>
+          <li class="legend-item tag-cluster" data-category="cluster">子音群</li>
+          <li class="legend-item tag-suffix" data-category="suffix">字尾後綴</li>
+          <li class="legend-item tag-rcontrolled" data-category="rcontrolled">母音 + 'r'</li>
+
+          <li class="legend-item tag-cle" data-category="cle">子音 '-LE'</li>
+
+          <li class="legend-item tag-silent-con" data-category="silent_consonant">不發音子音字母</li>
+        </ul>
+        <div id="teaching-grid" role="region" aria-label="教學卡片清單"></div>
+      </section>
+    </main>
+    <!-- 新增的版權和聯絡資訊區塊 -->
+    <footer class="credits">
+        © 2025 Christina Yu. All rights reserved.<br /><br />
+        
+        <a href="mailto:mamahowma@gmail.com" aria-label="Email mamahowma"><i class="fa-solid fa-envelope fa-xl fa-fw"></i></a>　
+        <a href="https://www.facebook.com/mamahowma" target="_blank" aria-label="mamahowma Facebook Page"><i class="fa-brands fa-facebook fa-xl fa-fw"></i></a>　
+        <a href="https://portaly.cc/mamahowma/support" target="_blank" aria-label="Support mamahowma"><i class="fa-solid fa-mug-hot fa-xl fa-fw"></i></a>
+    </footer>
+
+  </div>
+
+  <script>
+    // =========================
+    // 資料（WORDS）：只保留 1-10
+    // =========================
+    const WORDS = [
+      { number:1, word:"one", ipa:"/wʌn/", graphemes:["o","n","e"], phonemes:["/wʌ/","/n/","-"], hearts:[true,false,true], hint:"o 發 /wʌ/；e 不發音。" },
+      { number:2, word:"two", ipa:"/tu/", graphemes:["t","w","o"], phonemes:["/t/","-","/u/"], hearts:[false,true,true], hint:"w 不發音；o 發 /u/。" },
+      { number:3, word:"three", ipa:"/θri/", graphemes:["th","r","ee"], phonemes:["/θ/","/r/","/i/"], hearts:[false,false,false], hint:"th 是雙字母子音，發無聲吐舌音 /θ/；ee 發長母音 e /i/。" },
+      { number:4, word:"four", ipa:"/fɔr/", graphemes:["f","ou","r"], phonemes:["/f/","/ɔ/","/r/"], hearts:[false,true,false], hint:"ou 發 /ɔ/（❤）。" },
+      { number:5, word:"five", ipa:"/faɪv/", graphemes:["f","i","v","e"], phonemes:["/f/","/aɪ/","/v/","-"], hearts:[false,false,false,false], hint:"靜音 e：字尾 e 不發音，i 發長母音 /aɪ/。" },
+      { number:6, word:"six", ipa:"/sɪks/", graphemes:["s","i","x"], phonemes:["/s/","/ɪ/","/ks/"], hearts:[false,false,false], hint:"標準閉音節-短母音；x = /k/+ /s/。" },
+      { number:7, word:"seven", ipa:"/ˈsɛv.ən/", graphemes:["s","e","v","e","n"], phonemes:["/s/","/ɛ/","/v/","/ə/","/n/"], hearts:[false,false,false,false,false], hint:"第二音節 e 發弱化 /ə/。" },
+      { number:8, word:"eight", ipa:"/eɪt/", graphemes:["eigh","t"], phonemes:["/eɪ/","/t/"], hearts:[true,false], hint:"eigh 發 /eɪ/，如長母音 a（❤）。" },
+      { number:9, word:"nine", ipa:"/naɪn/", graphemes:["n","i","n","e"], phonemes:["/n/","/aɪ/","/n/","-"], hearts:[false,false,false,false], hint:"靜音 e：字尾 e 不發音，i 發長母音 /aɪ/。" },
+      { number:10, word:"ten", ipa:"/tɛn/", graphemes:["t","e","n"], phonemes:["/t/","/ɛ/","/n/"], hearts:[false,false,false], hint:"標準閉音節-短母音。" }
+    ];
+
+    // =========================
+    // 中文分類（顯示名稱 & 樣式）
+    // =========================
+    function tagInfo(key){
+      switch(key){
+        case 'irregular':        return { className:'tag-irregular',     name:'不規則拼寫' };
+        case 'closed':           return { className:'tag-closed',        name:'閉音節-短母音' };
+        case 'floss':            return { className:'tag-floss',         name:'重複子音字尾 (FLOSS-Z)' };
+        case 'digraph':          return { className:'tag-digraph',       name:'雙字母子音' };
+        case 'cluster':          return { className:'tag-cluster',       name:'子音群' };
+        case 'suffix':           return { className:'tag-suffix',        name:'字尾後綴' };
+        case 'rcontrolled':      return { className:'tag-rcontrolled',   name:"母音 + 'r'" };
+        case 'open':             return { className:'tag-open',          name:'開音節-長母音' };
+        case 'cle':              return { className:'tag-cle',           name:"子音 '-LE'" };
+        case 'magic_e':          return { className:'tag-magic-e-cn',    name:"長母音 + 靜音 'e'" };
+        case 'vowel_team':       return { className:'tag-vowel-team-cn', name:'母音組合' };
+        case 'diphthong':        return { className:'tag-diphthong',     name:'雙母音' };
+        case 'silent_consonant': return { className:'tag-silent-con',    name:'不發音子音字母' };
+        default:                 return { className:'tag-all',           name:'未分類' };
+      }
+    }
+
+    // =========================
+    // 依你指定的「多重分類」指派（只保留 1-10）
+    // =========================
+    const WORD_TAGS = {
+      1:['irregular'],
+      2:['irregular'],
+      3:['cluster','vowel_team'],
+      4:['irregular'],
+      5:['magic_e'],
+      6:['closed'],
+      7:['closed'],
+      8:['vowel_team'],
+      9:['magic_e'],
+      10:['closed']
+    };
+
+    // =========================
+    // 語音播放（Web Speech API）
+    // =========================
+    const synth = window.speechSynthesis; let voices = [];
+    function getUSEnglishVoice(){
+      if(voices.length===0 && synth.getVoices().length>0){ voices = synth.getVoices().filter(v=>v.lang.startsWith('en')); }
+      return voices.find(v=>v.lang==='en-US') || voices[0] || null;
+    }
+    if(synth.onvoiceschanged!==undefined){ synth.onvoiceschanged = ()=>{ voices = synth.getVoices(); }; }
+    function speak(word){
+      if(synth.speaking) synth.cancel();
+      if(!word) return;
+      const u = new SpeechSynthesisUtterance(word);
+      const v = getUSEnglishVoice();
+      if(v) u.voice = v;
+      u.lang='en-US'; u.rate=.9; u.pitch=1;
+      synth.speak(u);
+    }
+
+    // =========================
+    // 教學卡片渲染（徽章用中文多重分類）
+    // =========================
+    function renderTeachingPage(){
+      const grid = document.getElementById('teaching-grid'); if(!grid) return;
+      grid.innerHTML='';
+      WORDS.forEach(w=>{
+        const tags = WORD_TAGS[w.number] || [];
+        const badgeHTML = tags.map(t=>{
+          const info = tagInfo(t);
+          return `<span class="category-tag ${info.className}">${info.name}</span>`;
+        }).join(' ');
+        const gCells = w.graphemes.map((g,i)=>`<div class="grapheme-box box" role="gridcell">${g}${w.hearts[i]?'<span class="heart-symbol">❤</span>':''}</div>`).join('');
+        const pCells = w.phonemes.map(p=>`<div class="phoneme-box box" role="gridcell">${p}</div>`).join('');
+
+        const card = `
+          <article class="word-card" data-number="${w.number}" data-tags="${tags.join(',')}" aria-label="單字卡 ${w.word}">
+            <header class="card-header">
+              <div class="card-title"><span class="word-number">${w.number}</span><span class="word-text">${w.word}</span></div>
+              <button class="audio-button" aria-label="播放 ${w.word} 聲音" onclick="speak('${w.word}')">🔊</button>
+            </header>
+            <div class="card-body">
+              ${badgeHTML}
+              <div class="boxes-grid" role="grid" aria-label="字母與音標對齊盒"
+                   style="grid-template-columns:repeat(${w.graphemes.length},1fr);grid-template-rows:repeat(2,auto);">
+                ${gCells}
+                ${pCells}
+              </div>
+              <div class="word-tips"><span class="tips-icon">💡</span><span>${w.hint}</span></div>
+            </div>
+          </article>`;
+        grid.insertAdjacentHTML('beforeend', card);
+      });
+    }
+
+    // =========================
+    // 篩選（單選 + 自動隱藏無內容按鈕）
+    // =========================
+    let selectedFilter = 'all';
+
+    function countByFilter(){
+      // 回傳每個 filter key 對應的卡片數量
+      const counts = {};
+      Object.keys(WORD_TAGS).forEach(num=>{
+        (WORD_TAGS[num]||[]).forEach(tag=>{
+          counts[tag] = (counts[tag]||0) + 1;
+        });
+      });
+      return counts;
+    }
+
+    function setupCategoryFilters(){
+      const buttons = Array.from(document.querySelectorAll('#category-filters .legend-item'));
+      const counts = countByFilter();
+
+      // 自動隱藏沒有任何單字的按鈕（保留「全部」）
+      buttons.forEach(btn=>{
+        const key = btn.dataset.category;
+        if(key && key!=='all'){
+          // Check if the key exists in the counts of the filtered 1-10 words
+          if(!Object.prototype.hasOwnProperty.call(counts,key)){
+            btn.style.display = 'none';
+          }
+        }
+      });
+
+      function updateButtons(){
+        buttons.forEach(b=>{ b.classList.toggle('selected', (b.dataset.category||'all') === selectedFilter); });
+      }
+
+      buttons.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          selectedFilter = btn.dataset.category || 'all';
+          updateButtons();
+          applyFilters();
+        });
+      });
+
+      updateButtons();
+    }
+
+    function applyFilters(){
+      const cards = document.querySelectorAll('.word-card');
+      if(selectedFilter === 'all'){
+        cards.forEach(c=>c.classList.remove('hidden'));
+        return;
+      }
+      cards.forEach(c=>{
+        const tags = (c.getAttribute('data-tags')||'').split(',').filter(Boolean);
+        c.classList.toggle('hidden', !tags.includes(selectedFilter));
+      });
+    }
+
+    // =========================
+    // INIT
+    // =========================
+    document.addEventListener('DOMContentLoaded',()=>{
+      renderTeachingPage();
+      setupCategoryFilters();
+    });
+  </script>
+</body>
+</html>
