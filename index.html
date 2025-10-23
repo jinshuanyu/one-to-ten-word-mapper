@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>英文數字 1–10｜拼字 × 聲音對照表</title>
+  <title>英文 1–10 拼音學習</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+TC:wght@400;700&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet" />
@@ -66,7 +66,22 @@
     .box{display:flex;align-items:center;justify-content:center;min-height:60px;padding:.5rem;text-align:center;font-size:1.6rem;font-weight:700;border-right:2px solid #cbd5e1;}
     .box:last-child{border-right:none;}
     .grapheme-box{background:#f1f5f9;color:#1e293b;position:relative;font-family:'Inter','Noto Sans TC',sans-serif;border-bottom:2px solid #cbd5e1;grid-row:1;}
-    .phoneme-box{background:#fff;color:#475569;font-family:'Noto Sans',sans-serif;font-size:1.35rem;font-weight:400;grid-row:2;} 
+    .phoneme-box{
+      background:#fff;
+      color:#475569;
+      font-family:'Noto Sans',sans-serif;
+      font-size:1.35rem; /* Standard IPA size */
+      font-weight:400; /* Standard font weight for both IPA and Phonics now */
+      grid-row:2;
+      transition: all 0.2s ease;
+    }
+    /* Phonics mode styling: still slightly larger and using system/Inter font, but font-weight is 400 */
+    .phoneme-box.is-phonics {
+      font-family:'Inter','Noto Sans TC',sans-serif;
+      font-size:1.6rem; 
+      color:#0f172a; 
+      font-weight:400; /* Adjusted to 400 to match IPA */
+    }
     .heart-symbol{position:absolute;bottom:-2px;left:0;right:0;text-align:center;color:#ef4444;font-size:1.1rem;line-height:1;}
 
     /* 頁尾版權資訊 (Credits) */
@@ -92,6 +107,107 @@
     .word-tips{background:#fef3c7;border:1px solid #fbbf24;border-radius:6px;padding:.5rem .75rem;margin-top:1rem;font-family:'Noto Sans TC',sans-serif;color:#78350f;font-size:.95rem;line-height:1.4;display:flex;gap:.5rem;align-items:flex-start;}
     .tips-icon{color:#f59e0b;font-size:1.1rem;}
 
+    /* New Toggle Switch Styles */
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem; /* Reduced margin to pull up attribution text */
+      font-weight: 700;
+      color: #334155;
+      user-select: none;
+      font-size: 1rem;
+    }
+
+    /* Attribution Text Styles */
+    .attribution-note {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #64748b; /* slate-500 */
+      margin-top: 0; 
+      margin-bottom: 1.5rem; /* Space before the legend */
+      line-height: 1.5;
+    }
+    .attribution-note a {
+      color: #3b82f6; /* blue-500 */
+      text-decoration: underline;
+    }
+    .attribution-note a:hover {
+      color: #1d4ed8; /* blue-700 */
+    }
+
+    .toggle-label-ipa {
+        color: #64748b; /* Highlight IPA label */
+        transition: color 0.2s;
+    }
+    .toggle-label-phonics {
+        color: #64748b; /* Highlight Phonics label */
+        transition: color 0.2s;
+    }
+    /* Highlight the active label */
+    input:checked ~ .toggle-label-ipa {
+        color: #64748b; /* IPA inactive color */
+    }
+    input:checked ~ .toggle-label-phonics {
+        color: #0f172a; /* Phonics active color */
+    }
+    input:not(:checked) ~ .toggle-label-ipa {
+        color: #0f172a; /* IPA active color */
+    }
+    input:not(:checked) ~ .toggle-label-phonics {
+        color: #64748b; /* Phonics inactive color */
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+      /* Hide the actual label element so we can use the text outside the switch */
+      visibility: hidden;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbd5e1; /* slate-300 */
+      transition: .4s;
+      border-radius: 34px;
+      visibility: visible; /* Make slider visible */
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #3b82f6; /* blue-500 */
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    /* End Switch styling */
+
     @media (max-width:768px){
       .container{padding:.5rem;}
       h1{font-size:1.6rem;}
@@ -99,6 +215,12 @@
       .word-text{font-size:2rem;}
       .box{font-size:1.4rem;min-height:50px;}
       .phoneme-box{font-size:1.2rem;}
+      .phoneme-box.is-phonics {
+        font-size:1.4rem; 
+      }
+      .attribution-note{
+        font-size: 0.75rem;
+      }
     }
   </style>
 </head>
@@ -107,7 +229,24 @@
   <div class="container">
     <main>
       <section id="teachingPage" class="page-section active">
-        <h1>英文數字 1–10｜拼字 × 聲音對照表</h1>
+        <h1>數字英文 1–10 聲音對照表</h1>
+
+        <!-- New Toggle Switch for IPA/Phonics -->
+        <div class="toggle-container">
+          <span class="toggle-label toggle-label-ipa">IPA 音標</span>
+          <label class="switch">
+            <input type="checkbox" id="modeToggle">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label toggle-label-phonics">Phonics 拼音</span>
+        </div>
+        
+        <!-- NEW ATTRIBUTION LINE -->
+        <p class="attribution-note">
+          IPA 根據<a href="https://christinayu_english.rakosell.com/zh/page/american-ipa-guide" target="_blank">美式英語 IPA 國際音標指南</a><br>
+          Phonics 根據 <a href="https://ufli.education.ufl.edu/wp-content/uploads/2023/09/UFLI-Sound-Wall-rev.pdf" target="_blank">UFLI phonemes</a>
+        </p>
+        
         <ul class="legend" id="category-filters" aria-label="分類篩選">
           <li class="legend-item tag-all" data-category="all">全部</li>
           <li class="legend-item tag-irregular" data-category="irregular">不規則拼寫</li>
@@ -142,19 +281,29 @@
 
   <script>
     // =========================
-    // 資料（WORDS）：只保留 1-10
+    // 資料（WORDS）：更新為 UFLI Foundations 符號
     // =========================
     const WORDS = [
-      { number:1, word:"one", ipa:"/wʌn/", graphemes:["o","n","e"], phonemes:["/wʌ/","/n/","-"], hearts:[true,false,true], hint:"o 發 /wʌ/；e 不發音。" },
-      { number:2, word:"two", ipa:"/tu/", graphemes:["t","w","o"], phonemes:["/t/","-","/u/"], hearts:[false,true,true], hint:"w 不發音；o 發 /u/。" },
-      { number:3, word:"three", ipa:"/θri/", graphemes:["th","r","ee"], phonemes:["/θ/","/r/","/i/"], hearts:[false,false,false], hint:"th 是雙字母子音，發無聲吐舌音 /θ/；ee 發長母音 e /i/。" },
-      { number:4, word:"four", ipa:"/fɔr/", graphemes:["f","ou","r"], phonemes:["/f/","/ɔ/","/r/"], hearts:[false,true,false], hint:"ou 發 /ɔ/（❤）。" },
-      { number:5, word:"five", ipa:"/faɪv/", graphemes:["f","i","v","e"], phonemes:["/f/","/aɪ/","/v/","-"], hearts:[false,false,false,false], hint:"靜音 e：字尾 e 不發音，i 發長母音 /aɪ/。" },
-      { number:6, word:"six", ipa:"/sɪks/", graphemes:["s","i","x"], phonemes:["/s/","/ɪ/","/ks/"], hearts:[false,false,false], hint:"標準閉音節-短母音；x = /k/+ /s/。" },
-      { number:7, word:"seven", ipa:"/ˈsɛv.ən/", graphemes:["s","e","v","e","n"], phonemes:["/s/","/ɛ/","/v/","/ə/","/n/"], hearts:[false,false,false,false,false], hint:"第二音節 e 發弱化 /ə/。" },
-      { number:8, word:"eight", ipa:"/eɪt/", graphemes:["eigh","t"], phonemes:["/eɪ/","/t/"], hearts:[true,false], hint:"eigh 發 /eɪ/，如長母音 a（❤）。" },
-      { number:9, word:"nine", ipa:"/naɪn/", graphemes:["n","i","n","e"], phonemes:["/n/","/aɪ/","/n/","-"], hearts:[false,false,false,false], hint:"靜音 e：字尾 e 不發音，i 發長母音 /aɪ/。" },
-      { number:10, word:"ten", ipa:"/tɛn/", graphemes:["t","e","n"], phonemes:["/t/","/ɛ/","/n/"], hearts:[false,false,false], hint:"標準閉音節-短母音。" }
+      // one - o: 像短 u，不規則。n: /n/。e: 靜音。
+      { number:1, word:"one", ipa:"/wʌn/", graphemes:["o","n","e"], phonemes:["/wʌ/","/n/","-"], phonics:["/wŭ/","/n/","-"], hearts:[true,false,true], hint:"o 發 /wʌ/ (w + 短母音 u); e 不發音。" },
+      // two - t: /t/。w: 靜音。o: /oo/。
+      { number:2, word:"two", ipa:"/tu/", graphemes:["t","w","o"], phonemes:["/t/","-","/u/"], phonics:["/t/","-","/ū/"], hearts:[false,true,true], hint:"w 不發音；o 發長母音 u 的聲音 /u/。" },
+      // three - th: /th/。r: /r/。ee: /ē/。
+      { number:3, word:"three", ipa:"/θri/", graphemes:["th","r","ee"], phonemes:["/θ/","/r/","/i/"], phonics:["/th/","/r/","/ē/"], hearts:[false,false,false], hint:"th 是雙字母子音，發無聲吐舌音 /θ/；ee 發長母音 e /i/。" },
+      // four - f: /f/。ou: /ôr/ (r-controlled)。r: 靜音（在 r-controlled 之後）。
+      { number:4, word:"four", ipa:"/fɔr/", graphemes:["f","ou","r"], phonemes:["/f/","/ɔ/","/r/"], phonics:["/f/","/aw/","/r/"], hearts:[false,true,false], hint:"ou 發 /ɔ/（❤）。" },
+      // five - f: /f/。i: /ī/。v: /v/。e: 靜音。
+      { number:5, word:"five", ipa:"/faɪv/", graphemes:["f","i","v","e"], phonemes:["/f/","/aɪ/","/v/","-"], phonics:["/f/","/ī/","/v/","-"], hearts:[false,false,false,false], hint:"靜音 e：字尾 e 不發音，i 發長母音 /aɪ/。" },
+      // six - s: /s/。i: /ĭ/。x: /ks/。
+      { number:6, word:"six", ipa:"/sɪks/", graphemes:["s","i","x"], phonemes:["/s/","/ɪ/","/ks/"], phonics:["/s/","/ĭ/","/ks/"], hearts:[false,false,false], hint:"標準閉音節-短母音；x = /k/+ /s/。" },
+      // seven - s: /s/。e: /ĕ/。v: /v/。e: /ə/。n: /n/。
+      { number:7, word:"seven", ipa:"/ˈsɛv.ən/", graphemes:["s","e","v","e","n"], phonemes:["/s/","/ɛ/","/v/","/ə/","/n/"], phonics:["/s/","/ĕ/","/v/","/ə/","/n/"], hearts:[false,false,false,false,false], hint:"第一個 e 發短母音 e /ɛ/；第二音節 e 發弱化 /ə/。" },
+      // eight - eigh: /ā/ (不規則)。t: /t/。
+      { number:8, word:"eight", ipa:"/eɪt/", graphemes:["eigh","t"], phonemes:["/eɪ/","/t/"], phonics:["/ā/","/t/"], hearts:[true,false], hint:"eigh 發 /eɪ/，如長母音 a（❤）。" },
+      // nine - n: /n/。i: /ī/。n: /n/。e: 靜音。
+      { number:9, word:"nine", ipa:"/naɪn/", graphemes:["n","i","n","e"], phonemes:["/n/","/aɪ/","/n/","-"], phonics:["/n/","/ī/","/n/","-"], hearts:[false,false,false,false], hint:"靜音 e：字尾 e 不發音，i 發長母音 /aɪ/。" },
+      // ten - t: /t/。e: /ĕ/。n: /n/。
+      { number:10, word:"ten", ipa:"/tɛn/", graphemes:["t","e","n"], phonemes:["/t/","/ɛ/","/n/"], phonics:["/t/","/ĕ/","/n/"], hearts:[false,false,false], hint:"標準閉音節-短母音。" }
     ];
 
     // =========================
@@ -215,19 +364,40 @@
     }
 
     // =========================
+    // 模式切換狀態
+    // =========================
+    let displayMode = 'ipa'; // 'ipa' or 'phonics'
+
+    function toggleDisplayMode(){
+      const toggle = document.getElementById('modeToggle');
+      displayMode = toggle.checked ? 'phonics' : 'ipa';
+      renderTeachingPage(); // Rerender to apply changes
+      applyFilters(); // Re-apply filters to ensure visibility state is maintained
+    }
+
+    // =========================
     // 教學卡片渲染（徽章用中文多重分類）
     // =========================
     function renderTeachingPage(){
       const grid = document.getElementById('teaching-grid'); if(!grid) return;
       grid.innerHTML='';
+
+      // 根據當前模式選擇資料欄位和 CSS Class
+      const phonemeKey = displayMode === 'phonics' ? 'phonics' : 'phonemes';
+      const phonemeClass = displayMode === 'phonics' ? 'is-phonics' : '';
+
       WORDS.forEach(w=>{
         const tags = WORD_TAGS[w.number] || [];
         const badgeHTML = tags.map(t=>{
           const info = tagInfo(t);
           return `<span class="category-tag ${info.className}">${info.name}</span>`;
         }).join(' ');
+        
+        // 字母 (Graphemes)
         const gCells = w.graphemes.map((g,i)=>`<div class="grapheme-box box" role="gridcell">${g}${w.hearts[i]?'<span class="heart-symbol">❤</span>':''}</div>`).join('');
-        const pCells = w.phonemes.map(p=>`<div class="phoneme-box box" role="gridcell">${p}</div>`).join('');
+        
+        // 音標/拼音 (Phonemes/Phonics)
+        const pCells = w[phonemeKey].map(p=>`<div class="phoneme-box box ${phonemeClass}" role="gridcell">${p}</div>`).join('');
 
         const card = `
           <article class="word-card" data-number="${w.number}" data-tags="${tags.join(',')}" aria-label="單字卡 ${w.word}">
@@ -311,10 +481,15 @@
     // INIT
     // =========================
     document.addEventListener('DOMContentLoaded',()=>{
+      // Set up the toggle listener
+      const toggle = document.getElementById('modeToggle');
+      if(toggle){
+        toggle.addEventListener('change', toggleDisplayMode);
+      }
+      
       renderTeachingPage();
       setupCategoryFilters();
     });
   </script>
 </body>
 </html>
-
